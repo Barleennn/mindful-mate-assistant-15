@@ -91,7 +91,21 @@ export default {
             offsetDistance: "100%",
             offsetRotate: "auto"
           }
-        }
+        },
+        "icon-bounce-rotate": {
+          "0%": { 
+            transform: "translateY(0) rotate(0deg)",
+          },
+          "25%": {
+            transform: "translateY(-3px) rotate(-7deg)",
+          },
+          "75%": {
+            transform: "translateY(-3px) rotate(7deg)",
+          },
+          "100%": {
+            transform: "translateY(0) rotate(0deg)",
+          }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -99,7 +113,8 @@ export default {
         "fade-up": "fade-up 0.5s ease-out forwards",
         "fade-in": "fade-in 0.5s ease-out forwards",
         "pulse-ring": "pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "move-along-path": "move-along-path 15s linear infinite"
+        "move-along-path": "move-along-path 15s linear infinite",
+        "icon-bounce-rotate": "icon-bounce-rotate 0.8s ease-in-out",
       },
     },
   },
