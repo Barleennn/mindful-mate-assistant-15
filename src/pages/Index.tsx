@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Carousel, CarouselContent } from "@/components/ui/carousel";
 import { MainSlide } from "@/components/carousel-slides/MainSlide";
 import { NotificationsSlide } from "@/components/carousel-slides/NotificationsSlide";
@@ -7,10 +8,11 @@ import { DailySummarySlide } from "@/components/carousel-slides/DailySummarySlid
 import { HealthTrackerSlide } from "@/components/carousel-slides/HealthTrackerSlide";
 import { AchievementsSlide } from "@/components/carousel-slides/AchievementsSlide";
 import { FinalSlide } from "@/components/carousel-slides/FinalSlide";
-import { useEffect } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { fetchFile, toBlobURL } from "@ffmpeg/util";
+import { toBlobURL } from "@ffmpeg/util";
 import { toast } from "sonner";
+import html2canvas from 'html2canvas';
+import { Toaster } from "@/components/ui/sonner";
 
 const Index = () => {
   useEffect(() => {
@@ -88,6 +90,7 @@ const Index = () => {
           <FinalSlide />
         </CarouselContent>
       </Carousel>
+      <Toaster />
     </div>
   );
 };
