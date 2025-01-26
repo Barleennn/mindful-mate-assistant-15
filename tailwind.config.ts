@@ -106,6 +106,25 @@ export default {
             transform: "translateY(0) rotate(0deg)",
           }
         },
+        "count-up": {
+          "0%": { 
+            "counter-increment": "0",
+            content: "counter(0)"
+          },
+          "100%": { 
+            "counter-increment": "target",
+            content: "counter(target)"
+          }
+        },
+        "progress-line": {
+          "0%": { 
+            width: "0%",
+            opacity: "0"
+          },
+          "100%": { 
+            opacity: "1"
+          }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -115,6 +134,8 @@ export default {
         "pulse-ring": "pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "move-along-path": "move-along-path 15s linear infinite",
         "icon-bounce-rotate": "icon-bounce-rotate 0.8s ease-in-out",
+        "count-up": "count-up 1s ease-out forwards",
+        "progress-line": "progress-line 1.5s ease-out forwards"
       },
     },
   },

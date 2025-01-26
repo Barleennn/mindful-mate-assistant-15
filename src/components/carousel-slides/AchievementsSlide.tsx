@@ -1,7 +1,42 @@
 import { Trophy, Target, Users, Calendar } from "lucide-react";
 import { CarouselItem } from "@/components/ui/carousel";
+import { useEffect, useRef } from "react";
 
 export const AchievementsSlide = () => {
+  const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const progressRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    // Animate numbers
+    numberRefs.current.forEach((number, index) => {
+      if (number) {
+        const targetValue = [50, 100, 75][index];
+        let startValue = 0;
+        const duration = 1000;
+        const increment = targetValue / (duration / 16);
+
+        const updateNumber = () => {
+          startValue += increment;
+          if (startValue <= targetValue) {
+            number.textContent = Math.floor(startValue).toString();
+            requestAnimationFrame(updateNumber);
+          } else {
+            number.textContent = targetValue.toString();
+          }
+        };
+
+        requestAnimationFrame(updateNumber);
+      }
+    });
+
+    // Animate progress bars
+    progressRefs.current.forEach((progress) => {
+      if (progress) {
+        progress.classList.add("animate-progress-line");
+      }
+    });
+  }, []);
+
   return (
     <CarouselItem className="h-screen flex items-center justify-center">
       <div className="text-white space-y-8 p-8 max-w-4xl mx-auto">
@@ -16,15 +51,15 @@ export const AchievementsSlide = () => {
             <div className="space-y-3">
               <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
                 <span>Ранняя пташка</span>
-                <span className="text-yellow-400">+50 XP</span>
+                <span className="text-yellow-400" ref={el => numberRefs.current[0] = el}>0</span>
               </div>
               <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
                 <span>Марафонец</span>
-                <span className="text-yellow-400">+100 XP</span>
+                <span className="text-yellow-400" ref={el => numberRefs.current[1] = el}>0</span>
               </div>
               <div className="flex items-center justify-between bg-white/5 p-3 rounded-lg">
                 <span>Исследователь</span>
-                <span className="text-yellow-400">+75 XP</span>
+                <span className="text-yellow-400" ref={el => numberRefs.current[2] = el}>0</span>
               </div>
             </div>
           </div>
@@ -41,7 +76,11 @@ export const AchievementsSlide = () => {
                   <span>7/30 дней</span>
                 </div>
                 <div className="mt-2 h-2 bg-white/10 rounded-full">
-                  <div className="h-full w-1/4 bg-blue-400 rounded-full"></div>
+                  <div 
+                    className="h-full w-1/4 bg-blue-400 rounded-full transition-all duration-1000 ease-out"
+                    ref={el => progressRefs.current[0] = el}
+                    style={{ width: '0%' }}
+                  ></div>
                 </div>
               </div>
               <div className="relative bg-white/5 p-3 rounded-lg">
@@ -50,7 +89,11 @@ export const AchievementsSlide = () => {
                   <span>3/5 мест</span>
                 </div>
                 <div className="mt-2 h-2 bg-white/10 rounded-full">
-                  <div className="h-full w-3/5 bg-blue-400 rounded-full"></div>
+                  <div 
+                    className="h-full w-3/5 bg-blue-400 rounded-full transition-all duration-1000 ease-out"
+                    ref={el => progressRefs.current[1] = el}
+                    style={{ width: '0%' }}
+                  ></div>
                 </div>
               </div>
             </div>

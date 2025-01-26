@@ -6,9 +6,12 @@ export const DailySummarySlide = () => {
   const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const handleMouseEnter = (element: HTMLDivElement) => {
-      element.classList.add("animate-icon-bounce-rotate");
-    };
+    // Animate icons when slide appears
+    iconRefs.current.forEach((icon) => {
+      if (icon) {
+        icon.classList.add("animate-icon-bounce-rotate");
+      }
+    });
 
     const handleAnimationEnd = (element: HTMLDivElement) => {
       element.classList.remove("animate-icon-bounce-rotate");
@@ -16,7 +19,9 @@ export const DailySummarySlide = () => {
 
     iconRefs.current.forEach((icon) => {
       if (icon) {
-        icon.addEventListener("mouseenter", () => handleMouseEnter(icon));
+        icon.addEventListener("mouseenter", () => {
+          icon.classList.add("animate-icon-bounce-rotate");
+        });
         icon.addEventListener("animationend", () => handleAnimationEnd(icon));
       }
     });
@@ -24,7 +29,9 @@ export const DailySummarySlide = () => {
     return () => {
       iconRefs.current.forEach((icon) => {
         if (icon) {
-          icon.removeEventListener("mouseenter", () => handleMouseEnter(icon));
+          icon.removeEventListener("mouseenter", () => {
+            icon.classList.add("animate-icon-bounce-rotate");
+          });
           icon.removeEventListener("animationend", () => handleAnimationEnd(icon));
         }
       });
