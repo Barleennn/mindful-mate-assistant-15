@@ -4,14 +4,27 @@ import { useEffect, useRef } from "react";
 
 export const DailySummarySlide = () => {
   const iconRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const slideRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Animate icons when slide appears
-    iconRefs.current.forEach((icon) => {
-      if (icon) {
-        icon.classList.add("animate-icon-bounce-rotate");
-      }
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            iconRefs.current.forEach((icon) => {
+              if (icon) {
+                icon.classList.add("animate-icon-bounce-rotate");
+              }
+            });
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (slideRef.current) {
+      observer.observe(slideRef.current);
+    }
 
     const handleAnimationEnd = (element: HTMLDivElement) => {
       element.classList.remove("animate-icon-bounce-rotate");
@@ -19,19 +32,16 @@ export const DailySummarySlide = () => {
 
     iconRefs.current.forEach((icon) => {
       if (icon) {
-        icon.addEventListener("mouseenter", () => {
-          icon.classList.add("animate-icon-bounce-rotate");
-        });
         icon.addEventListener("animationend", () => handleAnimationEnd(icon));
       }
     });
 
     return () => {
+      if (slideRef.current) {
+        observer.unobserve(slideRef.current);
+      }
       iconRefs.current.forEach((icon) => {
         if (icon) {
-          icon.removeEventListener("mouseenter", () => {
-            icon.classList.add("animate-icon-bounce-rotate");
-          });
           icon.removeEventListener("animationend", () => handleAnimationEnd(icon));
         }
       });
@@ -39,7 +49,7 @@ export const DailySummarySlide = () => {
   }, []);
 
   return (
-    <CarouselItem className="h-screen flex items-center justify-center">
+    <CarouselItem className="h-screen flex items-center justify-center" ref={slideRef}>
       <div className="text-white space-y-8 p-8 max-w-4xl mx-auto">
         <div className="grid grid-cols-2 gap-8">
           <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 animate-fade-up">

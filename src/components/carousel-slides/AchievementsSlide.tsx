@@ -5,40 +5,65 @@ import { useEffect, useRef } from "react";
 export const AchievementsSlide = () => {
   const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const progressRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const slideRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Animate numbers
-    numberRefs.current.forEach((number, index) => {
-      if (number) {
-        const targetValue = [50, 100, 75][index];
-        let startValue = 0;
-        const duration = 1000;
-        const increment = targetValue / (duration / 16);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Animate numbers
+            numberRefs.current.forEach((number, index) => {
+              if (number) {
+                const targetValue = [50, 100, 75][index];
+                let startValue = 0;
+                const duration = 1000;
+                const increment = targetValue / (duration / 16);
 
-        const updateNumber = () => {
-          startValue += increment;
-          if (startValue <= targetValue) {
-            number.textContent = Math.floor(startValue).toString();
-            requestAnimationFrame(updateNumber);
-          } else {
-            number.textContent = targetValue.toString();
+                const updateNumber = () => {
+                  startValue += increment;
+                  if (startValue <= targetValue) {
+                    number.textContent = Math.floor(startValue).toString();
+                    requestAnimationFrame(updateNumber);
+                  } else {
+                    number.textContent = targetValue.toString();
+                  }
+                };
+
+                requestAnimationFrame(updateNumber);
+              }
+            });
+
+            // Animate progress bars
+            progressRefs.current.forEach((progress) => {
+              if (progress) {
+                progress.style.width = '0%';
+                progress.classList.add("animate-progress-line");
+                const finalWidth = progress.dataset.progress || '0';
+                setTimeout(() => {
+                  progress.style.width = `${finalWidth}%`;
+                }, 100);
+              }
+            });
           }
-        };
+        });
+      },
+      { threshold: 0.5 }
+    );
 
-        requestAnimationFrame(updateNumber);
-      }
-    });
+    if (slideRef.current) {
+      observer.observe(slideRef.current);
+    }
 
-    // Animate progress bars
-    progressRefs.current.forEach((progress) => {
-      if (progress) {
-        progress.classList.add("animate-progress-line");
+    return () => {
+      if (slideRef.current) {
+        observer.unobserve(slideRef.current);
       }
-    });
+    };
   }, []);
 
   return (
-    <CarouselItem className="h-screen flex items-center justify-center">
+    <CarouselItem className="h-screen flex items-center justify-center" ref={slideRef}>
       <div className="text-white space-y-8 p-8 max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center">Достижения и Челленджи</h2>
         
@@ -77,8 +102,9 @@ export const AchievementsSlide = () => {
                 </div>
                 <div className="mt-2 h-2 bg-white/10 rounded-full">
                   <div 
-                    className="h-full w-1/4 bg-blue-400 rounded-full transition-all duration-1000 ease-out"
+                    className="h-full bg-blue-400 rounded-full transition-all duration-1000 ease-out"
                     ref={el => progressRefs.current[0] = el}
+                    data-progress="25"
                     style={{ width: '0%' }}
                   ></div>
                 </div>
@@ -90,8 +116,9 @@ export const AchievementsSlide = () => {
                 </div>
                 <div className="mt-2 h-2 bg-white/10 rounded-full">
                   <div 
-                    className="h-full w-3/5 bg-blue-400 rounded-full transition-all duration-1000 ease-out"
+                    className="h-full bg-blue-400 rounded-full transition-all duration-1000 ease-out"
                     ref={el => progressRefs.current[1] = el}
+                    data-progress="60"
                     style={{ width: '0%' }}
                   ></div>
                 </div>
